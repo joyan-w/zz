@@ -129,10 +129,10 @@ by.joyan
       <button class="btn" id="piexBtn">平移像素值：(50,100)</button>
     </div>
     <div class="input-item">
-      <button class="btn" id="pantoBtn">地图中心点平移至：(116.405467,39.907761)</button>
+      <button class="btn" id="pantoBtn">显示指定位置及视角</button>
     </div>
     <div class="input-item">
-      <button class="btn" id="reset-bounds">指定地图显示范围</button>
+      <button class="btn" id="reset-bounds">显示指定范围</button>
     </div>
   </div>
   <!-- 菜单按钮 -->
@@ -262,40 +262,6 @@ by.joyan
       }));
     });
 
-    //菜单
-    window.onload = function() {
-      var btn = document.getElementById('show-btn'); //菜单按钮
-      var oCon = document.getElementById('show-rs').style;
-      btn.onclick = function() {
-        oCon.display = oCon.display == 'block' ? 'none' : 'block';
-        oCon.display = oCon.display == 'block' ? btn.innerHTML = '&ensp;X&ensp;' : btn.innerHTML = '&ensp;菜单&ensp;';
-      }
-    };
-
-    //点击选卡
-    AMap.event.addDomListener(document.getElementById('piexBtn'), 'click', function() {
-      map.panBy(50, 100);
-    });
-    AMap.event.addDomListener(document.getElementById('pantoBtn'), 'click', function() {
-      map.panTo([113.760735, 34.751837]);
-    }); //移动到，绑定按钮事件
-    AMap.event.addDomListener(document.getElementById('reset-bounds'), 'click', function() {
-      var mybounds = new AMap.Bounds([113.766651,34.75372], [113.757638,34.749727]);
-      map.setBounds(mybounds);
-      log.success("成功移动至指定范围"); //弹窗提示
-    }); //缩放到，绑定按钮事件，获取视野：https://lbs.amap.com/api/javascript-api/example/map/map-bounds
-
-    if (location.href.indexOf('guide=1') !== -1) {
-      map.setStatus({
-        scrollWheel: false
-      });
-      map.plugin(["AMap.ToolBar"], function() {
-        map.addControl(new AMap.ToolBar({
-          liteStyle: true
-        }))
-      });
-    }
-
     //其他插件载入
     AMap.plugin([
         /*'AMap.ToolBar',//工具条
@@ -322,6 +288,43 @@ by.joyan
         }));
       });
 
+    //菜单
+    window.onload = function() {
+      var btn = document.getElementById('show-btn'); //菜单按钮
+      var oCon = document.getElementById('show-rs').style;
+      btn.onclick = function() {
+        oCon.display = oCon.display == 'block' ? 'none' : 'block';
+        oCon.display = oCon.display == 'block' ? btn.innerHTML = '&ensp;X&ensp;' : btn.innerHTML = '&ensp;菜单&ensp;';
+      }
+    };
+
+    //点击选卡
+    AMap.event.addDomListener(document.getElementById('piexBtn'), 'click', function() {
+      map.panBy(50, 100);
+    });
+    AMap.event.addDomListener(document.getElementById('pantoBtn'), 'click', function() {
+      map.panTo([113.760735, 34.751837]); //移动至指定点
+      map.setZoom(19); //显示级别
+      map.setRotation(40); //平面视角
+      map.setPitch(75); //俯仰角
+      setTimeout(function() {
+        log.success("成功显示指定视角"); //弹窗提示
+      }, 0.3 * 1000); //延迟0.3秒加载
+    }); //移动到，绑定按钮事件
+    AMap.event.addDomListener(document.getElementById('reset-bounds'), 'click', function() {
+      var mybounds = new AMap.Bounds([113.766651, 34.75372], [113.757638, 34.749727]);
+      map.setBounds(mybounds); //显示指定范围
+      setTimeout(function() {
+        log.success("成功移动显示指定位置"); //弹窗提示
+      }, 0.3 * 1000); //延迟0.3秒加载
+    }); //缩放到，绑定按钮事件，获取视野：https://lbs.amap.com/api/javascript-api/example/map/map-bounds
+
+    if (location.href.indexOf('guide=1') !== -1) {
+      map.setStatus({
+        scrollWheel: false
+      });
+    }
+
     // 添加 3D 雷达
     var object3Dlayer = new AMap.Object3DLayer();
     map.add(object3Dlayer);
@@ -335,7 +338,7 @@ by.joyan
       var position_rd = [113.760735, 34.751837]
       var geometry = radar.geometry;
       var radius = 250; // 米
-      radius = radius / map.getResolution([113.760735, 34.751837], 20);
+      radius = radius / map.getResolution(position_rd, 20);
       var unit = 1;
       var range = 200;
       var count = range / unit;
@@ -361,7 +364,7 @@ by.joyan
         geometry.vertexColors.push(0, 1, 0.2, opacityEnd);
       }
 
-      radar.position([113.760735, 34.751837]);
+      radar.position(position_rd);
 
       object3Dlayer.add(radar);
     };
