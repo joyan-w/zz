@@ -319,12 +319,6 @@ by.joyan
       }, 0.3 * 1000); //延迟0.3秒加载
     }); //缩放到，绑定按钮事件，获取视野：https://lbs.amap.com/api/javascript-api/example/map/map-bounds
 
-    if (location.href.indexOf('guide=1') !== -1) {
-      map.setStatus({
-        scrollWheel: false
-      });
-    }
-
     // 添加 3D 雷达
     var object3Dlayer = new AMap.Object3DLayer();
     map.add(object3Dlayer);
