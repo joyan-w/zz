@@ -319,6 +319,9 @@ by.joyan
       }, 0.3 * 1000); //延迟0.3秒加载
     }); //缩放到，绑定按钮事件，获取视野：https://lbs.amap.com/api/javascript-api/example/map/map-bounds
 
+    //3D模型初始位置
+    var position_3d = [113.760735, 34.751837]
+
     // 添加 3D 雷达
     var object3Dlayer = new AMap.Object3DLayer();
     map.add(object3Dlayer);
@@ -329,10 +332,9 @@ by.joyan
       radar.transparent = true;
       radar.backOrFront = 'front';
 
-      var position_rd = [113.760735, 34.751837]
       var geometry = radar.geometry;
       var radius = 250; // 米
-      radius = radius / map.getResolution(position_rd, 20);
+      radius = radius / map.getResolution(position_3d, 20);
       var unit = 1;
       var range = 200;
       var count = range / unit;
@@ -358,7 +360,7 @@ by.joyan
         geometry.vertexColors.push(0, 1, 0.2, opacityEnd);
       }
 
-      radar.position(position_rd);
+      radar.position(position_3d);
 
       object3Dlayer.add(radar);
     };
@@ -378,8 +380,7 @@ by.joyan
     //模型
     var object3Dlayer = new AMap.Object3DLayer();
     map.add(object3Dlayer);
-
-    var center_3d = map.lngLatToGeodeticCoord([113.760735, 34.751837]);
+    var center_3d = map.lngLatToGeodeticCoord(position_3d); //模型初始位置
 
     var topColor = [0, 1, 1, 0.9];
     var topFaceColor = [0, 1, 1, 0.4];
