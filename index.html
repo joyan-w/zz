@@ -129,7 +129,7 @@ by.joyan
       <button class="btn" id="piexBtn">平移像素值：(50,100)</button>
     </div>
     <div class="input-item">
-      <button class="btn" id="pantoBtn">显示指定位置及视角</button>
+      <button class="btn" id="pantoBtn">显示指定视角</button>
     </div>
     <div class="input-item">
       <button class="btn" id="reset-bounds">显示指定范围</button>
@@ -262,32 +262,6 @@ by.joyan
       }));
     });
 
-    //其他插件载入
-    AMap.plugin([
-        /*'AMap.ToolBar',//工具条
-        'AMap.Scale',//比例尺
-        'AMap.OverView',//鹰眼控件
-        'AMap.MapType',//卫星切换控件
-        'AMap.Geolocation',//定位控件*/
-        'AMap.ControlBar', //3D 罗盘控制
-      ],
-      function() {
-        //其他控件添加
-        /*map.addControl(new AMap.ToolBar());//工具条
-        map.addControl(new AMap.Scale());//比例尺
-        map.addControl(new AMap.OverView({isOpen:false}));//鹰眼
-        map.addControl(new AMap.MapType());//图层切换
-        map.addControl(new AMap.Geolocation());//定位*/
-        map.addControl(new AMap.ControlBar({ // 添加 3D 罗盘控制
-          showZoomBar: false, //缩放按钮
-          showControlButton: true, //罗盘
-          position: { //位置
-            right: '10px',
-            top: '10px',
-          }
-        }));
-      });
-
     //菜单
     window.onload = function() {
       var btn = document.getElementById('show-btn'); //菜单按钮
@@ -380,6 +354,7 @@ by.joyan
     //模型
     var object3Dlayer = new AMap.Object3DLayer();
     map.add(object3Dlayer);
+
     var center_3d = map.lngLatToGeodeticCoord(position_3d); //模型初始位置
 
     var topColor = [0, 1, 1, 0.9];
